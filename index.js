@@ -6,6 +6,7 @@ import "dotenv/config";
 const app = express();
 const PORT = 4000;
 app.use(express.json());
+app.use(cors());
 
 // conncection to MONGO-DB 💽
 const client = new MongoClient(process.env.MONGODB_URL);
@@ -18,9 +19,21 @@ export async function connectToMongoDB() {
     console.dir(err);
   }
 }
-connectToMongoDB();
+const mongoClient = await connectToMongoDB();
+// database create
+const db = mongoClient.db("booknook");
+const bookCollection = db.collection("book");
+
+// ADDING the "add-book" 📚
+app.post("/add-book", async (req, res) => {
+  const data = req.body;
+  const result = await bookCollection.insertOne(data);
+  console.log(result);
+  res.send(result);
+});
 
 // Home page URL 🏠
+// http://localhost:4000/add-book
 app.get("/", (req, res) => {
   res.send("Hello BookNook!!!!");
 });
