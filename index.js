@@ -31,9 +31,13 @@ app.post("/add-book", async (req, res) => {
   console.log(result);
   res.send(result);
 });
-
+// Getting all books
+app.get("/books", async (req, res) => {
+  const result = await bookCollection.find().toArray();
+  res.send(result);
+});
 // Home page URL 🏠
-// http://localhost:4000/add-book
+// http://localhost:4000/books
 app.get("/", (req, res) => {
   res.send("Hello BookNook!!!!");
 });
