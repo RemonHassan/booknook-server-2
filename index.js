@@ -54,6 +54,15 @@ app.patch("/books/:id", async (req, res) => {
   res.json(result);
 });
 
+// DELETE api
+app.delete("/books/:id", async (req, res) => {
+  const { id } = req.params;
+  const result = await bookCollection.deleteOne({
+    _id: new ObjectId(id),
+  });
+  res.json(result);
+});
+
 // Home page URL 🏠
 // http://localhost:4000/books/:id
 app.get("/", (req, res) => {
