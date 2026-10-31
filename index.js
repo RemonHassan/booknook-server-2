@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 import "dotenv/config";
 
 const app = express();
@@ -36,8 +36,26 @@ app.get("/books", async (req, res) => {
   const result = await bookCollection.find().toArray();
   res.send(result);
 });
+// getting a sigleBook for details
+app.get("/books/:id", async (req, res) => {
+  const { id } = req.params;
+  const result = await bookCollection.findOne({ _id: new ObjectId(id) });
+  res.send(result);
+});
+
+// Edit Books
+app.patch("/books/:id", async (req, res) => {
+  const { id } = req.params;
+  const updatedData = req.body;
+  const result = await bookCollection.updateOne(
+    { _id: new ObjectId(id) },
+    { $set: updatedData },
+  );
+  res.json(result);
+});
+
 // Home page URL 🏠
-// http://localhost:4000/books
+// http://localhost:4000/books/:id
 app.get("/", (req, res) => {
   res.send("Hello BookNook!!!!");
 });
