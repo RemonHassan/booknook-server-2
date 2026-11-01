@@ -43,6 +43,12 @@ app.get("/books/:id", async (req, res) => {
   const result = await bookCollection.findOne({ _id: new ObjectId(id) });
   res.send(result);
 });
+// getting all books by email
+app.get("/books/user/:email", async (req, res) => {
+  const { email } = req.params;
+  const result = await bookCollection.find({ email: email }).toArray();
+  res.send(result);
+});
 
 // Edit Books
 app.patch("/books/:id", async (req, res) => {
