@@ -32,6 +32,22 @@ app.post("/add-book", async (req, res) => {
   console.log(result);
   res.send(result);
 });
+// new Books
+// Ensure this route is placed BEFORE app.get("/books/:id") in index.js
+app.get("/books/new-arrivals", async (req, res) => {
+  try {
+    const newArrivals = await bookCollection
+      .find({ addedDate: { $exists: true, $ne: null } }) // Only match documents with a valid addedDate
+      .sort({ addedDate: -1 })
+      .limit(6)
+      .toArray();
+
+    res.json(newArrivals);
+  } catch (error) {
+    console.error("Error fetching new arrivals:", error);
+    res.status(500).json({ error: "Failed to fetch new arrivals" });
+  }
+});
 // Getting all books
 app.get("/books", async (req, res) => {
   const result = await bookCollection.find().toArray();
