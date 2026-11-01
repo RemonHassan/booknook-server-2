@@ -23,6 +23,7 @@ const mongoClient = await connectToMongoDB();
 // database create
 const db = mongoClient.db("booknook");
 const bookCollection = db.collection("book");
+const borrowingCollection = db.collection("borrowing");
 
 // ADDING the "add-book" 📚
 app.post("/add-book", async (req, res) => {
@@ -63,8 +64,20 @@ app.delete("/books/:id", async (req, res) => {
   res.json(result);
 });
 
+// Borrowing
+app.post("/borrowing", async (req, res) => {
+  const data = req.body;
+  const result = await borrowingCollection.insertOne(data);
+  res.send(result);
+});
+app.get("/my-borrowing/:email", async (req, res) => {
+  const { email } = req.params;
+  const result = await borrowingCollection.find({ email: email }).toArray();
+  res.send(result);
+});
+
 // Home page URL 🏠
-// http://localhost:4000/books/:id
+// http://localhost:4000/my-borrowing/:email
 app.get("/", (req, res) => {
   res.send("Hello BookNook!!!!");
 });
