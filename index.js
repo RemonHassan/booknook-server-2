@@ -99,7 +99,7 @@ app.patch("/books/:id", verifyToken, async (req, res) => {
   res.json(result);
 });
 
-// DELETE api
+// DELETE api for book
 app.delete("/books/:id", verifyToken, async (req, res) => {
   const { id } = req.params;
   const result = await bookCollection.deleteOne({
@@ -107,10 +107,13 @@ app.delete("/books/:id", verifyToken, async (req, res) => {
   });
   res.json(result);
 });
+// Return api for book
+// Express Backend: POST /return
 
 // Borrowing
 app.post("/borrowing", async (req, res) => {
   const data = req.body;
+  console.log(data);
   const result = await borrowingCollection.insertOne(data);
   res.send(result);
 });
@@ -119,6 +122,12 @@ app.get("/my-borrowing/:email", verifyToken, async (req, res) => {
   const result = await borrowingCollection.find({ email: email }).toArray();
   res.send(result);
 });
+
+//
+//
+
+//
+//
 
 // Home page URL 🏠
 // http://localhost:4000/my-borrowing/:email
